@@ -1,9 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import ImgSlider from "./ImgSlider";
 import Movies from "./Movies";
 import Viewers from "./Viewers";
+import { setMovies } from "../features/movie/movieSlice";
+
+// firebase stuff
+import db from "../firebase";
+import { useDispatch } from "react-redux";
+
 function Home() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    db.collection("movies").onSnapshot((snapshot) => {
+      let tempMovies = snapshot.docs.map((doc) => {
+        return { id: doc.id, ...doc.data() };
+      });
+      // console.log("tempMovies:-", tempMovies);
+      dispatch(setMovies(tempMovies));
+    });
+    // console.log("function-:", dispatch);
+  });
+
   return (
     <Container>
       <ImgSlider />

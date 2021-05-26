@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import Details from "./components/Details";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import Login from "./components/Login";
 
 function App() {
   return (
@@ -13,6 +14,10 @@ function App() {
         <Header />
 
         <Switch>
+          <Route exact path="/login">
+            <Login />
+          </Route>
+
           <Route exact path="/details">
             <Details />
           </Route>
