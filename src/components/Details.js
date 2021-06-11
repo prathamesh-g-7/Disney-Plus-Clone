@@ -1,51 +1,63 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
+import db from "../firebase";
 
 function Details() {
+  const { id } = useParams();
+
+  const [movie, setMovie] = useState();
+
+  useEffect(() => {
+    // grab the movie info from db
+    db.collection("movies")
+      .doc(id)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          // save the movie data
+          setMovie(doc.data());
+        } else {
+          //redirect to home page
+        }
+      });
+  }, []);
+
   return (
     <Container>
-      <Background>
-        <img
-          src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/4F39B7E16726ECF419DD7C49E011DD95099AA20A962B0B10AA1881A70661CE45/scale?width=1440&aspectRatio=1.78&format=jpeg"
-          alt=""
-        />
-      </Background>
-      <ImageTitle>
-        <img
-          src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/D7AEE1F05D10FC37C873176AAA26F777FC1B71E7A6563F36C6B1B497CAB1CEC2/scale?width=1440&aspectRatio=1.78"
-          alt=""
-        />
-      </ImageTitle>
+      {movie && (
+        <>
+          <Background>
+            <img src={movie.backgroundImg} alt="" />
+          </Background>
+          <ImageTitle>
+            <img src={movie.titleImg} alt="" />
+          </ImageTitle>
 
-      <Controls>
-        <PlayButton>
-          <img src="/images/play-icon-black.png" alt="" />
-          <span>PLAY</span>
-        </PlayButton>
+          <Controls>
+            <PlayButton>
+              <img src="/images/play-icon-black.png" alt="" />
+              <span>PLAY</span>
+            </PlayButton>
 
-        <TrailerButton>
-          <img src="/images/play-icon-white.png" alt="" />
-          <span>Trailer</span>
-        </TrailerButton>
+            <TrailerButton>
+              <img src="/images/play-icon-white.png" alt="" />
+              <span>Trailer</span>
+            </TrailerButton>
 
-        <AddButton>
-          <span>+</span>
-        </AddButton>
+            <AddButton>
+              <span>+</span>
+            </AddButton>
 
-        <GroupButton>
-          <img src="/images/group-icon.png" alt="" />
-        </GroupButton>
-      </Controls>
+            <GroupButton>
+              <img src="/images/group-icon.png" alt="" />
+            </GroupButton>
+          </Controls>
 
-      <SubTitle>2018 .7m . Family, Fantasy, Kids, Aimation</SubTitle>
-      <Description>
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae
-        obcaecati minima ea autem est quis. Vero eum odio fugit, sint facere
-        doloremque laboriosam enim eius excepturi molestias rem quia? Repellat
-        cupiditate amet quis earum suscipit placeat unde veritatis laboriosam
-        laudantium maiores! Eveniet omnis similique ab, cumque deleniti
-        quibusdam tenetur quos.
-      </Description>
+          <SubTitle>{movie.subTitle}</SubTitle>
+          <Description>{movie.description}</Description>
+        </>
+      )}
     </Container>
   );
 }

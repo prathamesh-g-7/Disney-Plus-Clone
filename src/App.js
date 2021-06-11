@@ -18,7 +18,7 @@ function App() {
             <Login />
           </Route>
 
-          <Route exact path="/details">
+          <Route exact path="/details/:id">
             <Details />
           </Route>
 
